@@ -26,10 +26,13 @@ https://www.npmjs.com/get-npm
 Download Newman to run the collection suite via Command Line Interface or Terminal using the following Node Package Manager command</p>
 <i>npm install -g newman</i>
 <p>*Please verify you are using the latest version of NPM and POSTMAN for compatibility.</p>
-<H4>TEST REPORTING>HTMLEXTRA Reports</H4>
-<p>A Newman HTML reporter that has been extended to include the separation of the iteration runs so these are no longer aggregated together and also some additional handlebars helpers to enable users to create better custom templates<p>
+<H4>TEST REPORTING USING HTMLEXTRA Reports</H4>
+<p>This is a Newman HTML reporter that has been extended to include the separation of the iteration runs so these are no longer aggregated together and also some additional handlebars helpers to enable users to create better custom templates<p>
+ <br>
+ <p>source</p>
 https://www.npmjs.com/package/newman-reporter-htmlextra
-to install use the following Node Package Manager command after installing Npm & Newman (see below)</p>
+ <br>
+to install htmlextra use the following Node Package Manager command after installing Npm & Newman (see below)</p>
 <i>npm install -g newman-reporter-htmlextra</i>
 <H5>GENERATING HTML REPORTS</H5>
  <p>run the following command to use the library (which specifies the Collection and environment and reporter to use)</p>
