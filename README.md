@@ -13,6 +13,8 @@ https://reqres.in/
 <i>Used to Test Negative scenarios where input of invalid or incorrect data, etc are used to test expected error handling and responses from the API endpoint and/or response contents.</i>
 <H4>E2E TESTS</H4>
 <p>Used to test E2E Flows Scenarios</p>
+<H4>API PERFORMANCE TESTS - SAMPLE</H4>
+<i>API Performance Test: These sample Tests are used to validate response times on the Endpoints and to create a base suite that can be shared with other Performance Tools e.g Gattling, Jmeter,K6(load Testing - peak metrics - endurance tests)</i>
 <H4>TEST REPORTS</H4>
 <p>Using <strong>htmlextra</strong> npm library for Newman or Postman Runner Test Run Snippets where not available</p>
 <br>
