@@ -1,0 +1,1836 @@
+{
+	"info": {
+		"_postman_id": "79268e54-86eb-4a68-9fa3-0e25b1c4a0f3",
+		"name": "InfoTrack Technical Test",
+		"description": "This Collection is used for Technical Test, it consists of a small automated API collection(s)\nusing endpoints using https://reqres.in/ domain",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Methods",
+			"item": [
+				{
+					"name": "GET - List Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 200 ",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//Verify Response Header ContentType to match application/json ",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users?page=2",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Single User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 200 ",
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"//Verify Response Header ContentType to match application/json ",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									"//Verify the Correct user (Id) matches the response body",
+									"pm.test(\"Correct user-id is returned in response body\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.data.id).is.to.equal(2);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users/{{user-id}}",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{user-id}}"
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 201 ",
+									"pm.test(\"Status code is 201\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"//Verify Response Header ContentType to match application/json ",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									"//Verify Correct created user (name, job) matches the response body",
+									"pm.test(\"Verify Correct New user details are returned in response\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.name).is.to.equal(\"morpheus\");",
+									"  pm.expect(jsonData.job).is.to.equal(\"leader\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"leader\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/users/",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Login - Succesful",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 200 ",
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"//Verify Response Header ContentType to match application/json ",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									"//Verify Login Response Contains bearer token",
+									"pm.test(\"Verify bearer token exists in response\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(pm.response.text()).to.include(\"token\");",
+									"});",
+									"//Persist token in an environment variable",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"bearer-token\", jsonData.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/login",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Login - Unsuccesful",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 400 ",
+									"pm.test(\"Status code is 400\", function () {",
+									"  pm.response.to.have.status(400);",
+									"});",
+									"//Verify Response Header ContentType to match application/json; charset=utf-8 ",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									"//Verify Login Response Contains bearer token",
+									"pm.test(\"Verify bearer token does not exists in response\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(pm.response.text()).to.not.include(\"token\");",
+									"});",
+									"//Persist token in an environment variable",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"bearer-token\", jsonData.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"peter@klaven\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/login",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Update User details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 200 ",
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"//Verify Response Header ContentType to match application/json ",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									"//Verify Correct created user (name) matches the response body",
+									"pm.test(\"Verify Correct New user Name is returned in response\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.job).is.to.equal('zion resident');",
+									"});",
+									"//Verify Correct created user (job) matches the response body",
+									"pm.test(\"Verify Correct New user Job is returned in response\", function () {",
+									"  var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.job).is.to.equal('zion resident');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"zion resident\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/api/users/2",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete - Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Verify the Response status code 201 ",
+									"pm.test(\"Status code is 204\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/users/2",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						},
+						"description": "GET a list of users (/api/users?page=)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API TEST SUITE - DOCUMENTATION ATTACHED",
+			"item": [
+				{
+					"name": "Submit Bearer Token ",
+					"item": [
+						{
+							"name": "POST - Login - Succesful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify the Response status code 200 ",
+											"pm.test(\"Status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});",
+											"//Verify Login Response Contains bearer token",
+											"pm.test(\"Verify bearer token exists in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(pm.response.text()).to.include(\"token\");",
+											"});",
+											"//Persist token in an environment variable",
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"bearer-token\", jsonData.token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/login",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "GET - List Users",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify Authorization header (bearer token) is present in request",
+											"pm.test(\"Bearer Token request header is present\", () => {",
+											"pm.request.to.have.header(\"Authorization\");",
+											"});",
+											"",
+											"//Verify the Response status code 200 ",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearer-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/api/users?page=2",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "POST - Login - Unsuccesful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify Authorization header (bearer token) is present in request",
+											"pm.test(\"Bearer Token request header is present\", () => {",
+											"pm.request.to.have.header(\"Authorization\");",
+											"});",
+											"",
+											"//Verify the Response status code 400 ",
+											"pm.test(\"Status code is 400\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});",
+											"//Verify Response Header ContentType to match application/json; charset=utf-8 ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});",
+											"//Verify Login Response Contains bearer token",
+											"pm.test(\"Verify bearer token does not exists in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(pm.response.text()).to.not.include(\"token\");",
+											"});",
+											"//Persist token in an environment variable",
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"bearer-token\", jsonData.token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearer-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"peter@klaven\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/login",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "PUT - Update User details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify Authorization header (bearer token) is present in request ",
+											"pm.test(\"Bearer Token request header is present\", () => {",
+											"pm.request.to.have.header(\"Authorization\");",
+											"});",
+											"",
+											"//Verify the Response status code 200 ",
+											"pm.test(\"Status code is 201\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});",
+											"//Verify Correct created user (name) matches the response body",
+											"pm.test(\"Verify Correct New user Name is returned in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(jsonData.job).is.to.equal('zion resident');",
+											"});",
+											"//Verify Correct created user (job) matches the response body",
+											"pm.test(\"Verify Correct New user Job is returned in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(jsonData.job).is.to.equal('zion resident');",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearer-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"zion resident\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/users/2",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete - Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify Authorization request header (bearer token) is present in request ",
+											"pm.test(\"Bearer Token request header is present\", () => {",
+											"pm.request.to.have.header(\"Authorization\");",
+											"});",
+											"",
+											"//Verify the Response status code 204 ",
+											"pm.test(\"Status code is 201\", function () {",
+											"  pm.response.to.have.status(204);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearer-token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/api/users/2",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						}
+					],
+					"description": "This Suite will:\nRequest a bearer from Login-Succesful\nSubmit Bearer Token to GET POST PUT DELETE endpoints\n"
+				},
+				{
+					"name": "Negative Tests",
+					"item": [
+						{
+							"name": "GET - Single User Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify the Response status code 404 ",
+											"pm.test(\"Status code is 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});",
+											"//NEGATIVE - Verify the Response status code 404 ",
+											"pm.test(\"Status code should not be a 200\", function () {",
+											"  pm.response.to.not.have.status(200);",
+											"});",
+											"//NEGATIVE - Verify the Response status code 500 ",
+											"pm.test(\"Status code should not be a 500\", function () {",
+											"  pm.response.to.not.have.status(500);",
+											"});",
+											"pm.test(\"Status code should not be a 201\", function () {",
+											"  pm.response.to.not.have.status(201);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/api/users/{{invalid-user-id}}",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"{{invalid-user-id}}"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "POST - Login - Succesful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify the Response status code 200 ",
+											"pm.test(\"NEGATIVE - Status code is 400\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"NEGATIVE - Content-Type header is not exact to application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.not.eql('application/json');",
+											"});",
+											"//Verify Login Response Contains error key value pair",
+											"pm.test(\"NEGATIVE - Verify fail text does not exist in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(pm.response.text()).to.not.include(\"fail\");",
+											"});",
+											"//Verify Login Response Contains expected error message",
+											"pm.test(\"NEGATIVE - Verify error message matches expected message value\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(jsonData.error).to.eql(\"Missing password\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"eve.holt@reqres.in\"\n    \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/login",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "POST - Login - Unsuccesful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//NEGATIVE - Verify the Response status is not 200 or 201 ",
+											"pm.test(\"NEGATIVE - Status code is not 200 or 201\", function () {",
+											"  pm.response.to.not.have.status(200,201);",
+											"});",
+											"//NEGATIVE - Verify Response Header ContentType to exactly match application/json",
+											"pm.test(\"NEGATIVE - Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.not.eql('application/json');",
+											"});",
+											"//NEGATIVE - Verify Login Response Contains bearer token",
+											"pm.test(\"NEGATIVE - Verify bearer token does not exists in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(pm.response.text()).to.not.include(\"token\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"peter@klaven\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/login",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "PUT - Update User details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//NEGATIVE - Verify the Response status is not 200 or 201 ",
+											"pm.test(\"NEGATIVE - Status code is not 400, 401 or 403\", function () {",
+											"  pm.response.to.not.have.status(400,401,403);",
+											"});",
+											"",
+											"//NEGATIVE - Verify Authorization header (bearer token) is not present in request ",
+											"pm.test(\"NEGATIVE - Bearer Token request header is not present\", () => {",
+											"pm.request.to.not.have.header(\"Authorization\");",
+											"});",
+											"",
+											"//Verify the Response status code 200 ",
+											"pm.test(\"Status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});",
+											"//Verify Correct created user (name) matches the response body",
+											"pm.test(\"Verify Correct New user Name is returned in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(jsonData.job).is.to.equal('zion resident');",
+											"});",
+											"//Verify Correct created user (job) matches the response body",
+											"pm.test(\"Verify Correct New user Job is returned in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(jsonData.job).is.to.equal('zion resident');",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"zion resident\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/users/2",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete - Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//NEGATIVE - Verify the Response status is not 300, 401 or 404 ",
+											"pm.test(\"NEGATIVE - Status code is not 300, 401 or 404\", function () {",
+											"  pm.response.to.not.have.status(300,401,404);",
+											"});",
+											"//NEGATIVE - Verify the Response status is not 300, 401 or 404 ",
+											"pm.test(\"NEGATIVE - Status code is not 500 or 502\", function () {",
+											"  pm.response.to.not.have.status(500,502);",
+											"});",
+											"",
+											"//NEGATIVE - Verify Authorization request header (bearer token) is not present in request ",
+											"pm.test(\"NEGATIVE - Bearer Token request header is not present\", () => {",
+											"pm.request.to.not.have.header(\"Authorization\");",
+											"});",
+											"",
+											"//Verify the Response status code 201 ",
+											"pm.test(\"Status code is 204\", function () {",
+											"  pm.response.to.have.status(204);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/api/users/2",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						}
+					],
+					"description": "Tese Suite contains negative scenarios for enpoints:\nPOST - LOGIN SUCCESSFUL\nPOST - LOGIN UNSUCCESSFU\nGET - DELAYED RESPONSE\nPUT - UPDATE\nDELETE - DELETE\n"
+				},
+				{
+					"name": "E2E Tests",
+					"item": [
+						{
+							"name": "E2E -Create new User in the System",
+							"item": [
+								{
+									"name": "POST - Register - Succesful",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Register Response Contains Id Field",
+													"pm.test(\"Verify Id exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"id\");",
+													"});",
+													"//Verify Register Response Contains bearer token",
+													"pm.test(\"Verify bearer token exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"token\");",
+													"});",
+													"//Persist token in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"bearer-token\", jsonData.token);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/register",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"register"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "POST - Login - Succesful",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Login Response Contains bearer token",
+													"pm.test(\"Verify bearer token exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"token\");",
+													"});",
+													"//Persist token in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"bearer-token\", jsonData.token);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/login",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"login"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "POST - Create User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 201 ",
+													"pm.test(\"Status code is 201\", function () {",
+													"  pm.response.to.have.status(201);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Correct created user (name, job) matches the response body",
+													"pm.test(\"Verify Correct New user details are returned in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  var testName = pm.environment.get('test-name')",
+													"  var testJob = pm.environment.get('test-job')",
+													"  pm.expect(jsonData.name).is.to.equal(testName);",
+													"  pm.expect(jsonData.job).is.to.equal(testJob);",
+													"});",
+													"",
+													"//Persist user id in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"created-user-id\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{test-name}}\",\n    \"job\": \"{{test-job}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/users/",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												""
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "GET - Single User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//NOTE- THIS FINAL TEST WILL ALWAYS FAIL AS IT WILL NOT FETCH THE CREATED USER DETAILS RESPONSE FROM THE SERVER",
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify the Correct user (Id) matches the response body",
+													"//NOTE- THIS TEST WILL ALWAYS FAIL AS THERE IS AN EMPTY JSON RESPONSE FROM THE SERVER",
+													"pm.test(\"Correct user-id is returned in response body\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  var createdUserId = pm.variables.get(\"created-user-id\");",
+													"  console.log(createdUserId);",
+													"  pm.expect(jsonData.id).is.to.equal(createdUserId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base-url}}/api/users/{{created-user-id}}",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												"{{created-user-id}}"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								}
+							],
+							"description": "E2E Scenario: Customer creates a new user in the system.\nSteps:\nUser Registers in the System\nAfter Succesful registration, the user logs into the system\nAfter Succesful login, A new user is created in the system\nCreated user is verified in the User list\n"
+						},
+						{
+							"name": "E2E - Update New User Details",
+							"item": [
+								{
+									"name": "POST - Register - Succesful",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Register Response Contains Id Field",
+													"pm.test(\"Verify Id exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"id\");",
+													"});",
+													"//Verify Register Response Contains bearer token",
+													"pm.test(\"Verify bearer token exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"token\");",
+													"});",
+													"//Persist token in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"bearer-token\", jsonData.token);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/register",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"register"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "POST - Login - Succesful",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Login Response Contains bearer token",
+													"pm.test(\"Verify bearer token exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"token\");",
+													"});",
+													"//Persist token in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"bearer-token\", jsonData.token);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/login",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"login"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "POST - Create User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 201 ",
+													"pm.test(\"Status code is 201\", function () {",
+													"  pm.response.to.have.status(201);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Correct created user (name, job) matches the response body",
+													"pm.test(\"Verify Correct New user details are returned in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  var testName = pm.environment.get('test-name')",
+													"  var testJob = pm.environment.get('test-job')",
+													"  pm.expect(jsonData.name).is.to.equal(testName);",
+													"  pm.expect(jsonData.job).is.to.equal(testJob);",
+													"});",
+													"",
+													"//Persist user id in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"created-user-id\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{test-name}}\",\n    \"job\": \"{{test-job}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/users/",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												""
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "PUT - Update User details",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Correct created user (job) matches the response body",
+													"pm.test(\"Verify Updated user details (name,job) are returned in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  var updatedName = pm.environment.get('name')",
+													"  var updatedJob = pm.environment.get('job')",
+													"  pm.expect(jsonData.name).is.to.equal(updatedName);",
+													"  pm.expect(jsonData.job).is.to.equal(updatedJob);",
+													"  ",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/users/{{created-user-id}}",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												"{{created-user-id}}"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								}
+							],
+							"description": "E2E Scenario: Update details on a new user in the system.\nSteps:\nUser Registers in the System\nAfter Succesful registration, the user logs into the system\nAfter Succesful login, A new user is created in the system\nUser Deatils are updated in the system\n",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "E2E - Delete new User created in the system",
+							"item": [
+								{
+									"name": "POST - Register - Succesful",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Register Response Contains Id Field",
+													"pm.test(\"Verify Id exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"id\");",
+													"});",
+													"//Verify Register Response Contains bearer token",
+													"pm.test(\"Verify bearer token exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"token\");",
+													"});",
+													"//Persist token in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"bearer-token\", jsonData.token);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/register",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"register"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "POST - Login - Succesful",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 200 ",
+													"pm.test(\"Status code is 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Login Response Contains bearer token",
+													"pm.test(\"Verify bearer token exists in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).to.include(\"token\");",
+													"});",
+													"//Persist token in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"bearer-token\", jsonData.token);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/login",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"login"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "POST - Create User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 201 ",
+													"pm.test(\"Status code is 201\", function () {",
+													"  pm.response.to.have.status(201);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify Correct created user (name, job) matches the response body",
+													"pm.test(\"Verify Correct New user details are returned in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  var testName = pm.environment.get('test-name')",
+													"  var testJob = pm.environment.get('test-job')",
+													"  pm.expect(jsonData.name).is.to.equal(testName);",
+													"  pm.expect(jsonData.job).is.to.equal(testJob);",
+													"});",
+													"",
+													"//Persist user id in an environment variable",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"created-user-id\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{test-name}}\",\n    \"job\": \"{{test-job}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base-url}}/api/users/",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												""
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete - Delete User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//NEGATIVE - Verify the Response status is not 300, 401 or 404 ",
+													"pm.test(\"NEGATIVE - Status code is not 300, 401 or 404\", function () {",
+													"  pm.response.to.not.have.status(300,401,404);",
+													"});",
+													"//NEGATIVE - Verify the Response status is not 300, 401 or 404 ",
+													"pm.test(\"NEGATIVE - Status code is not 500 or 502\", function () {",
+													"  pm.response.to.not.have.status(500,502);",
+													"});",
+													"",
+													"//NEGATIVE - Verify Authorization request header (bearer token) is not present in request ",
+													"pm.test(\"NEGATIVE - Bearer Token request header is not present\", () => {",
+													"pm.request.to.not.have.header(\"Authorization\");",
+													"});",
+													"",
+													"//Verify the Response status code 201 ",
+													"pm.test(\"Status code is 204\", function () {",
+													"  pm.response.to.have.status(204);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{base-url}}/api/users/{{created-user-id}}",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												"{{created-user-id}}"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								},
+								{
+									"name": "GET - Single User Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Verify the Response status code 404 ",
+													"pm.test(\"Verify Status code is 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});",
+													"//Verify Response Header ContentType to match application/json ",
+													"pm.test(\"Content-Type header is application/json\", () => {",
+													"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+													"});",
+													"//Verify no user details (id,name,job) are present in response",
+													"pm.test(\"Verify no user details (id,name,job) are present in response\", function () {",
+													"  var jsonData = pm.response.json();",
+													"  pm.expect(pm.response.text()).not.to.include(\"id\");",
+													"  pm.expect(pm.response.text()).not.to.include(\"name\");",
+													"  pm.expect(pm.response.text()).not.to.include(\"job\");  ",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base-url}}/api/users/{{created-user-id}}",
+											"host": [
+												"{{base-url}}"
+											],
+											"path": [
+												"api",
+												"users",
+												"{{created-user-id}}"
+											]
+										},
+										"description": "GET a list of users (/api/users?page=)"
+									},
+									"response": []
+								}
+							],
+							"description": "E2E Scenario: Delete a new user createdin the system. Steps: User Registers in the System After Succesful registration, the user logs into the system.\nAfter Succesful login, Existing user is removed from the system.\nFinally we verify deleted user is not present in the system."
+						}
+					],
+					"description": "This Collection contains E2E Tests for https://reqres.in/ Endpoints"
+				},
+				{
+					"name": "Performance Test",
+					"item": [
+						{
+							"name": "POST - Login - Succesful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Verify the Response status code 200 ",
+											"pm.test(\"Status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"//Verify Response Header ContentType to match application/json ",
+											"pm.test(\"Content-Type header is application/json\", () => {",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+											"});",
+											"//Verify Login Response Contains bearer token",
+											"pm.test(\"Verify bearer token exists in response\", function () {",
+											"  var jsonData = pm.response.json();",
+											"  pm.expect(pm.response.text()).to.include(\"token\");",
+											"});",
+											"//Persist token in an environment variable",
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"bearer-token\", jsonData.token);",
+											"",
+											"pm.test(\"PERFORMANCE -Response time is less than 1500ms limit\", function() {",
+											"var limit = 1500;",
+											"pm.expect(pm.response.responseTime, \"Response time was longer than \" + limit + \" ms.\").to.be.below(limit);",
+											"console.log(\"Response Time: \" + pm.response.responseTime + \" ms\" + \" / Response Date: \" + pm.response.headers.get(\"Date\"));",
+											"});",
+											"",
+											"pm.test(\"PERFORMANCE -Response time is less than 3000ms limit\", function() {",
+											"var limit = 3000;",
+											"pm.expect(pm.response.responseTime, \"Response time was longer than \" + limit + \" ms.\").to.be.below(limit);",
+											"console.log(\"Response Time: \" + pm.response.responseTime + \" ms\" + \" / Response Date: \" + pm.response.headers.get(\"Date\"));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/login",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								},
+								"description": "GET a list of users (/api/users?page=)"
+							},
+							"response": []
+						}
+					],
+					"description": "API Performance Test: \nThese Tests are used to validate response times on the Endpoints and to create a base suite for Performance Tools e.g K6(load Testing - peak metrics - endurance tests) \nMultiple instances of the POSTMAN runner can be used although it is not recommended for Memory Resources."
+				}
+			],
+			"description": "<title><H1>API test suite</H1> <title>\n<p>This Test Suite is used for Testing and Validating ENDPOINTS for the following base url:\nhttps://reqres.in/\n<br>\n<H2>TEST SUITE HIGH LEVEL BREAKDOWN</H2></p>\n<strong>- NOTE: Please refer to each subsections for detailed test Overview and description </strong>\n<br>\n<H3>FUNCTIONAL TESTS</H3>\n<H4>BEARER TOKEN VALUE TEST</H4>\n<p>Tests to obtain and Submit a bearer token to multiple endpoints (GET,POST,PUT,DELETE)</p>\n<H4>NEGATIVE TESTS</H4>\n<i>Used to Test Negative scenarios where input of invalid or incorrect data, etc are used to test expected error handling and responses from the API endpoint and/or response contents.</i>\n<H4>E2E TESTS</H4>\n<p>Used to test E2E Flows Scenarios</p>\n\n\n<br>\n\n<H2>INSTRUCTIONS</H2>\n<H3><strong>HOW TO RUN:</strong></H3>\n<p>Download Postman Client via web browser or via Node Package Manager\nhttps://www.postman.com/\nhttps://www.npmjs.com/get-npm\n(OPTIONAL)\nDownload Newman to run the collection suite via Command Line Interface or Terminal using the following Node Package Manager command</p>\n<i>$ npm install -g newman</i>\n<p>*Please verify you are using the latest version of NPM and POSTMAN for compatibility.</p>\n\n<footer>\n<p><i>Created by Harold Baldwin (github: sirhazman07)\n on 15/05/2017<p><i>\n<p>This source code (collection and environment files hosted in github \n<a href= \"https://github.com/sirhazman07/Infotrack-technical-test-automation-suite\">here</a>\n</p>\n</footer>"
+		}
+	],
+	"variable": [
+		{
+			"key": "base-url",
+			"value": "https://reqres.in/"
+		}
+	]
+}
