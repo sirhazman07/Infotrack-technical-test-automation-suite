@@ -1,5 +1,5 @@
 # Infotrack-technical-test-automation-suite
-<title><H1>API test suite</H1> <title>
+<H1>API test suite</H1>
 <p>This Test Suite is used for Testing and Validating ENDPOINTS for the following base url:
 https://reqres.in/
 <br>
