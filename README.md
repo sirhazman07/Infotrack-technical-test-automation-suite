@@ -14,30 +14,28 @@ https://reqres.in/
 <H4>E2E TESTS</H4>
 <p>Used to test E2E Flows Scenarios</p>
 <H4>TEST REPORTS</H4>
-<p>Using <strong>htmlextra<strong> npm library for Newman
+<p>Using <strong>htmlextra</strong> npm library for Newman or Postman Runner Test Run Snippets where not available</p>
 <br>
 
 <H2>INSTRUCTIONS AND USAGE</H2>
 <H3><strong>HOW TO RUN:</strong></H3>
-<p>Download Postman Client via web browser or via Node Package Manager
+<p>Download Postman Client via web browser or via Node Package Manager</p> 
 https://www.postman.com/
 https://www.npmjs.com/get-npm
-(OPTIONAL)
-Download Newman to run the collection suite via Command Line Interface or Terminal using the following Node Package Manager command</p>
+<p>Download Newman to run the collection suite via Command Line Interface or Terminal using the following Node Package Manager command</p>
 <i>npm install -g newman</i>
 <p>*Please verify you are using the latest version of NPM and POSTMAN for compatibility.</p>
 <H4>TEST REPORTING USING HTMLEXTRA Reports</H4>
 <p>This is a Newman HTML reporter that has been extended to include the separation of the iteration runs so these are no longer aggregated together and also some additional handlebars helpers to enable users to create better custom templates<p>
- <br>
- <p>source</p>
 https://www.npmjs.com/package/newman-reporter-htmlextra
  <br>
 to install htmlextra use the following Node Package Manager command after installing Npm & Newman (see below)</p>
 <i>npm install -g newman-reporter-htmlextra</i>
 <H5>GENERATING HTML REPORTS</H5>
  <p>run the following command to use the library (which specifies the Collection and environment and reporter to use)</p>
-<i>newman run infotrack_technical_test.postman_collection.json -e reqres_in_postman_environment.json -r htmlextra</i>
- <p>*Please verify you are inside the correct folder location and both files exactly match the file names in the command</p>
+<strong><i>newman run infotrack_technical_test.postman_collection.json -e reqres_in_postman_environment.json -r htmlextra</i></strong>
+<br>
+<p>*Please verify you are inside the correct folder location and both files exactly match the file names in the command</p>
 <footer>
 <p><i>Created by Harold Baldwin (github: sirhazman07)
  on 15/05/2017<p><i>
